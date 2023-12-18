@@ -475,4 +475,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
 API/appsettings.json
+API/erosArrows.db-shm
+API/erosArrows.db-wal
