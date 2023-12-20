@@ -2,7 +2,11 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Navbar</a>
 
-    <div class="collapse navbar-collapse" id="navbarNav" *ngIf="loggedIn">
+    <div
+      class="collapse navbar-collapse"
+      id="navbarNav"
+      *ngIf="accountService.currentUser$ | async"
+    >
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="#">Matches</a>
@@ -16,7 +20,7 @@
       </ul>
     </div>
 
-    <div class="dropdown" *ngIf="loggedIn" dropdown>
+    <div class="dropdown" *ngIf="accountService.currentUser$ | async" dropdown>
       <a class="dropdown-toggle text-decoration-none" dropdownToggle
         >Welcome user</a
       >
@@ -27,7 +31,7 @@
     </div>
 
     <form
-      *ngIf="!loggedIn"
+      *ngIf="!(accountService.currentUser$ | async)"
       #loginForm="ngForm"
       class="d-flex"
       (ngSubmit)="login()"
