@@ -479,3 +479,4 @@ $RECYCLE.BIN/
 API/appsettings.json
 API/erosArrows.db-shm
 API/erosArrows.db-wal
+API/erosArrows.db
