@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { AccountService } from './../_services/account.service';
 
 @Component({
   selector: 'app-register',
@@ -6,9 +7,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
+  @Output() cancelRegister = new EventEmitter();
   model: any = {};
 
-  register() {}
+  constructor(private accountService: AccountService) {}
 
-  cancel() {}
+  register() {
+    this.accountService.register(this.model).subscribe({
+      next: () => {
+        this.cancel();
+      },
+      error: (error) => console.log(error),
+    });
+  }
+
+  cancel() {
+    this.cancelRegister.emit(false);
+  }
 }
