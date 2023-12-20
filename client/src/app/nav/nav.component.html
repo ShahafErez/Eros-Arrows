@@ -13,15 +13,14 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Messages</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" (click)="logout()">Logout</a>
-        </li>
       </ul>
     </div>
 
-    <div class="dropdown" *ngIf="loggedIn">
-      <a class="dropdown-toggle">Welcome user</a>
-      <div class="dropdown-menu">
+    <div class="dropdown" *ngIf="loggedIn" dropdown>
+      <a class="dropdown-toggle text-decoration-none" dropdownToggle
+        >Welcome user</a
+      >
+      <div class="dropdown-menu" *dropdownMenu>
         <a class="dropdown-item">Edit Profile</a>
         <a class="dropdown-item" (click)="logout()">logout</a>
       </div>
