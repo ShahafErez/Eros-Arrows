@@ -1,4 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 body {
   text-align: center;
+  background-image: url(./assets/images/background.webp);
+}
+
+.btn {
+  margin: 5px;
+}
+
+.btn-primary {
+  background-color: #4a86ae;
+  border: 1px solid #4a86ae;
+}
+
+.btn-primary:hover {
+  background-color: #709ab6;
+  border: 1px solid #709ab6;
 }
