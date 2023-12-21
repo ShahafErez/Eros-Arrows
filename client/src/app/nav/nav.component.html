@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" routerLink="/">
       <img
@@ -39,9 +39,13 @@
       </ul>
     </div>
 
-    <div class="dropdown" *ngIf="accountService.currentUser$ | async" dropdown>
+    <div
+      class="dropdown"
+      *ngIf="accountService.currentUser$ | async as user"
+      dropdown
+    >
       <a class="dropdown-toggle text-decoration-none" dropdownToggle
-        >Welcome user</a
+        >Welcome {{ user.username | titlecase }}</a
       >
       <div class="dropdown-menu" *dropdownMenu>
         <a class="dropdown-item">Edit Profile</a>
@@ -70,7 +74,7 @@
         type="password"
         placeholder="Password"
       />
-      <button class="btn btn-outline-success" type="submit">Login</button>
+      <button class="btn btn-success" type="submit">Login</button>
     </form>
   </div>
 </nav>
