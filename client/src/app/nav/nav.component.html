@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" routerLink="/">
       <img
         src="/assets/images/logo-no-background.png"
         alt="logo"
@@ -15,13 +15,25 @@
     >
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">Matches</a>
+          <a
+            class="nav-link"
+            routerLink="/members"
+            routerLinkActive="active-link"
+            >Matches</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Lists</a>
+          <a class="nav-link" routerLink="/lists" routerLinkActive="active-link"
+            >Lists</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Messages</a>
+          <a
+            class="nav-link"
+            routerLink="/Messages"
+            routerLinkActive="active-link"
+            >Messages</a
+          >
         </li>
       </ul>
     </div>

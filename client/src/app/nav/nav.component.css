@@ -11,3 +11,7 @@ a {
 .dropdown-item {
   cursor: pointer;
 }
+
+.active-link {
+  font-weight: 500;
+}
