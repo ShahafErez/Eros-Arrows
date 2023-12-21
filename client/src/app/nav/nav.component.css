@@ -1,3 +1,12 @@
+.navbar {
+  padding: 0px;
+}
+
+a {
+  font-size: 18px;
+  color: black;
+}
+
 .dropdown-toggle,
 .dropdown-item {
   cursor: pointer;
