@@ -6,7 +6,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, catchError } from 'rxjs';
 
@@ -30,25 +30,22 @@ export class ErrorInterceptor implements HttpInterceptor {
                     modelStateErrors.push(error.error.errors[key]);
                   }
                 }
-                throw modelStateErrors;
+                throw modelStateErrors.flat();
               } else {
-                this.toastr.error(error.error, error.status.toString());
+                this.toastr.error(error.error);
               }
               break;
 
             case 401:
-              this.toastr.error('Unauthorised', error.status.toString());
+              this.toastr.error('Unauthorised');
               break;
 
             case 404:
-              this.router.navigateByUrl('/not-found');
+              this.toastr.error('Not found', error.status.toString());
               break;
 
             case 500:
-              const navigationExtras: NavigationExtras = {
-                state: { error: error.error },
-              };
-              this.router.navigateByUrl('/server-error', navigationExtras);
+              this.toastr.error('An error occurred');
               break;
 
             default:
