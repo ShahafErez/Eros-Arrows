@@ -108,7 +108,7 @@
     "Country": "Uganda",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/male/31.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/31.jpg",
         "IsMain": true
       }
     ]
@@ -127,7 +127,7 @@
     "Country": "Micronesia",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/male/80.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/80.jpg",
         "IsMain": true
       }
     ]
@@ -146,7 +146,7 @@
     "Country": "Latvia",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/male/69.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/69.jpg",
         "IsMain": true
       }
     ]
@@ -165,7 +165,7 @@
     "Country": "Virgin Islands (British)",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/male/17.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/17.jpg",
         "IsMain": true
       }
     ]
@@ -184,7 +184,7 @@
     "Country": "Zambia",
     "Photos": [
       {
-        "Url": "https://randomuser.me/api/portraits/male/79.jpg",
+        "Url": "https://randomuser.me/api/portraits/men/79.jpg",
         "IsMain": true
       }
     ]
