@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -13,7 +14,10 @@ import { ToastrModule } from 'ngx-toastr';
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
     }),
+    NgxSpinnerModule.forRoot({
+      type: 'ball-beat',
+    }),
   ],
-  exports: [BsDropdownModule, ToastrModule, TabsModule],
+  exports: [BsDropdownModule, ToastrModule, TabsModule, NgxSpinnerModule],
 })
 export class SharedModule {}
