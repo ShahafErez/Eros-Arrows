@@ -49,8 +49,11 @@ export class MemberEditComponent {
   }
 
   updateMember() {
-    console.log(this.member);
-    this.toastr.success('Profile updated successfuly');
-    this.editForm?.reset(this.member);
+    this.membersService.updateMember(this.editForm?.value).subscribe({
+      next: () => {
+        this.toastr.success('Profile updated successfuly');
+        this.editForm?.reset(this.member);
+      },
+    });
   }
 }
