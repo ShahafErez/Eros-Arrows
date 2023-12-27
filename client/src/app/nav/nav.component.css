@@ -8,6 +8,12 @@ a {
   color: black;
 }
 
+img {
+  max-height: 40px;
+  border: 2px solid white;
+  display: inline;
+}
+
 .dropdown-toggle,
 .dropdown-item {
   cursor: pointer;
