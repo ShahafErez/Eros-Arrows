@@ -21,6 +21,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { NavComponent } from './nav/nav.component';
 import { RegisterComponent } from './register/register.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
+import { DatePickerComponent } from './_forms/date-picker/date-picker.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { TextInputComponent } from './_forms/text-input/text-input.component';
     MemberEditComponent,
     PhotoEditorComponent,
     TextInputComponent,
+    DatePickerComponent,
   ],
   imports: [
     BrowserModule,
