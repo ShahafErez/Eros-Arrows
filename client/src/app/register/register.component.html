@@ -1,36 +1,59 @@
 <form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
   <h2 class="text-primary">Sign up</h2>
-  <div class="mb-3">
-    <input
-      type="text"
-      [class.is-invalid]="
-        registerForm.get('username')?.errors &&
-        registerForm.get('username')?.touched
-      "
-      class="form-control"
-      formControlName="username"
-      placeholder="Username"
-    />
-    <div class="invalid-feedback">Please enter a username</div>
-  </div>
 
   <div class="mb-3">
-    <input
-      type="password"
-      class="form-control"
-      formControlName="password"
-      placeholder="Password"
-    />
+    <label style="margin-right: 10px">I am a:</label>
+    <label id="form-check-label">
+      <input
+        type="radio"
+        class="form-check-input"
+        value="male"
+        formControlName="gender"
+      />Male
+    </label>
+    <label id="form-check-label">
+      <input
+        type="radio"
+        class="form-check-input ms-3"
+        value="female"
+        formControlName="gender"
+      />Female
+    </label>
   </div>
 
-  <div class="mb-3">
-    <input
-      type="password"
-      class="form-control"
-      formControlName="confirmPassword"
-      placeholder="Confirm Password"
-    />
-  </div>
+  <app-text-input
+    [formControl]="$any(registerForm.controls['username'])"
+    [label]="'Username'"
+  />
+  <app-text-input
+    [formControl]="$any(registerForm.controls['knownAs'])"
+    [label]="'Known As'"
+  />
+  <app-text-input
+    [formControl]="$any(registerForm.controls['dateOfBirth'])"
+    [label]="'Date of birth'"
+  />
+  <app-text-input
+    [formControl]="$any(registerForm.controls['city'])"
+    [label]="'City'"
+  />
+
+  <app-text-input
+    [formControl]="$any(registerForm.controls['country'])"
+    [label]="'Country'"
+  />
+
+  <app-text-input
+    [formControl]="$any(registerForm.controls['password'])"
+    [label]="'Password'"
+    type="'password'"
+  />
+
+  <app-text-input
+    [formControl]="$any(registerForm.controls['confirmPassword'])"
+    [label]="'Confirm Password'"
+    type="'password'"
+  />
 
   <button class="btn btn-primary" type="submit">Register</button>
   <button class="btn btn-secondary" type="button" (click)="cancel()">
