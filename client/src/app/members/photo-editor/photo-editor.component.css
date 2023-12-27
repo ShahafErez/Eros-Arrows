@@ -1,0 +1,11 @@
+#photo-uploader {
+  margin-top: 10px;
+}
+
+.nv-file-over {
+  border: dotted 1px red;
+}
+
+input[type="file"] {
+  color: transparent;
+}

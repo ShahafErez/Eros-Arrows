@@ -50,6 +50,7 @@ public class UsersController : BaseApiController
     {
         var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
         if (user == null) return NotFound();
+
         var result = await _photoService.AddPhotoAsync(file);
         if (result.Error != null) return BadRequest(result.Error.Message);
         var photo = new Photo
@@ -57,10 +58,52 @@ public class UsersController : BaseApiController
             Url = result.SecureUrl.AbsoluteUri,
             PublicId = result.PublicId
         };
-        // if it's the first photo by the user, we'll set it as mauin
+
+        // if it's the first photo by the user, we'll set it as admin
         if (user.Photos.Count == 0) photo.IsMain = true;
         user.Photos.Add(photo);
-        if (await _userRepository.SaveAllAsync()) return _mapper.Map<PhotoDto>(photo);
+        if (await _userRepository.SaveAllAsync())
+        {
+            var headerValue = new { username = user.UserName };
+            var createdObject = _mapper.Map<PhotoDto>(photo);
+            return CreatedAtAction(nameof(getUser), headerValue, createdObject);
+        }
         return BadRequest("Problem adding photo");
+    }
+
+    [HttpPut("set-main-photo/{photoId}")]
+    public async Task<ActionResult> SetMainPhoto(int photoId)
+    {
+        var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+        if (user == null) return NotFound();
+        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+        if (photo == null) return NotFound();
+        if (photo.IsMain) return BadRequest(String.Format("Photo with ID {0} is already set as the main photo", photoId));
+        var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
+        if (currentMain != null) currentMain.IsMain = false;
+        photo.IsMain = true;
+
+        if (await _userRepository.SaveAllAsync()) return NoContent();
+        return BadRequest("problem setting the new photo");
+    }
+
+    [HttpDelete("delete-photo/{photoId}")]
+    public async Task<ActionResult> DeletePhoto(int photoId)
+    {
+        var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+        if (user == null) return NotFound();
+        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+        if (photo == null) return NotFound();
+        if (photo.IsMain) return BadRequest("Cannot delete main photo");
+        if (photo.PublicId != null)
+        {
+            // delete from cloudnairy
+            var result = await _photoService.DeletePhotoAsync(photo.PublicId);
+            if (result.Error != null) return BadRequest(result.Error.Message);
+        }
+
+        user.Photos.Remove(photo);
+        if (await _userRepository.SaveAllAsync()) return Ok();
+        return BadRequest("Problem deleting photo");
     }
 }
