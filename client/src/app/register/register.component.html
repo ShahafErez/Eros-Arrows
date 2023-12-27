@@ -1,12 +1,25 @@
-<form #registerForm="" ngForm (ngSubmit)="register()">
+<form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
   <h2 class="text-primary">Sign up</h2>
   <div class="mb-3">
     <input
       type="text"
+      [class.is-invalid]="
+        registerForm.get('username')?.errors &&
+        registerForm.get('username')?.touched
+      "
       class="form-control"
-      name="username"
-      [(ngModel)]="model.username"
+      formControlName="username"
       placeholder="Username"
+    />
+    <div class="invalid-feedback">Please enter a username</div>
+  </div>
+
+  <div class="mb-3">
+    <input
+      type="password"
+      class="form-control"
+      formControlName="password"
+      placeholder="Password"
     />
   </div>
 
@@ -14,9 +27,8 @@
     <input
       type="password"
       class="form-control"
-      name="password"
-      [(ngModel)]="model.password"
-      placeholder="Password"
+      formControlName="confirmPassword"
+      placeholder="Confirm Password"
     />
   </div>
 
