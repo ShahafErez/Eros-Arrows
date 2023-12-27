@@ -6,6 +6,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AccountService } from './../_services/account.service';
 
 @Component({
@@ -15,13 +16,14 @@ import { AccountService } from './../_services/account.service';
 })
 export class RegisterComponent {
   @Output() cancelRegister = new EventEmitter();
-  model: any = {};
   registerForm: FormGroup = new FormGroup({});
   maxDate: Date = new Date();
+  validationErrors: string[] | undefined;
 
   constructor(
     private accountService: AccountService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -63,16 +65,29 @@ export class RegisterComponent {
   }
 
   register() {
-    console.log(this.registerForm?.value);
-    // this.accountService.register(this.model).subscribe({
-    //   next: () => {
-    //     this.cancel();
-    //   },
-    //   error: (error) => console.log(error.error),
-    // });
+    const dob = this.getDateOnly(
+      this.registerForm.controls['dateOfBirth'].value
+    );
+    const values = { ...this.registerForm.value, dateOfBirth: dob };
+    this.accountService.register(values).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/members');
+      },
+      error: (error) => (this.validationErrors = error),
+    });
   }
 
   cancel() {
     this.cancelRegister.emit(false);
+  }
+
+  private getDateOnly(dob: string | undefined) {
+    if (!dob) return;
+    let newDob = new Date(dob);
+    return new Date(
+      newDob.setMinutes(newDob.getMinutes() - newDob.getTimezoneOffset())
+    )
+      .toISOString()
+      .slice(0, 10);
   }
 }
