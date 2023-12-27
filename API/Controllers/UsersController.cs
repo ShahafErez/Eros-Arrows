@@ -50,6 +50,7 @@ public class UsersController : BaseApiController
     {
         var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
         if (user == null) return NotFound();
+
         var result = await _photoService.AddPhotoAsync(file);
         if (result.Error != null) return BadRequest(result.Error.Message);
         var photo = new Photo
@@ -57,10 +58,16 @@ public class UsersController : BaseApiController
             Url = result.SecureUrl.AbsoluteUri,
             PublicId = result.PublicId
         };
-        // if it's the first photo by the user, we'll set it as mauin
+
+        // if it's the first photo by the user, we'll set it as admin
         if (user.Photos.Count == 0) photo.IsMain = true;
         user.Photos.Add(photo);
-        if (await _userRepository.SaveAllAsync()) return _mapper.Map<PhotoDto>(photo);
+        if (await _userRepository.SaveAllAsync())
+        {
+            var headerValue = new { username = user.UserName };
+            var createdObject = _mapper.Map<PhotoDto>(photo);
+            return CreatedAtAction(nameof(getUser), headerValue, createdObject);
+        }
         return BadRequest("Problem adding photo");
     }
 }
