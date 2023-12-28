@@ -28,9 +28,18 @@ public class UserRepository : IUserRepository
 
     public async Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams)
     {
-        var query = _context.Users.ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-        .AsNoTracking();
-        return await PagedList<MemberDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+        var query = _context.Users.AsQueryable();
+        query = query.Where(u => u.UserName != userParams.CurrentUsername);
+        query = query.Where(u => u.Gender == userParams.Gender);
+
+        var oldestDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge - 1));
+        var youngestDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge - 1));
+
+        query = query.Where(u => u.DateOfBirth >= oldestDob && u.DateOfBirth <= youngestDob);
+
+        return await PagedList<MemberDto>.CreateAsync(
+            query.AsNoTracking().ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
+            userParams.PageNumber, userParams.PageSize);
     }
 
     public async Task<User> GetUserByIdAsync(int id)
