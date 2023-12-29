@@ -13,6 +13,7 @@ import { AccountService } from './account.service';
 })
 export class MembersService {
   baseUrlUsers = environment.apiUrl + '/users';
+  baseUrlLikes = environment.apiUrl + '/likes';
   members: Member[] = [];
   memberCache = new Map();
   user: User | undefined;
@@ -103,12 +104,22 @@ export class MembersService {
     return this.http.delete(`${this.baseUrlUsers}/delete-photo/${photoId}`);
   }
 
-  private getPaginatedResult<T>(url: string, queryParams: HttpParams) {
+  addLike(username: string) {
+    return this.http.post(`${this.baseUrlLikes}/${username}`, {});
+  }
+
+  getLikes(predicate: string, pageNumber: number, pageSize: number) {
+    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    params = params.append('predicate', predicate);
+    return this.getPaginatedResult<Member[]>(this.baseUrlLikes, params);
+  }
+
+  private getPaginatedResult<T>(url: string, params: HttpParams) {
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
     return this.http
       .get<T>(url, {
         observe: 'response',
-        params: queryParams,
+        params: params,
       })
       .pipe(
         map((response) => {

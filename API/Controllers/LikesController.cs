@@ -1,6 +1,7 @@
 ﻿using API.Controllers;
 using API.DTOs;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +31,7 @@ public class LikesController : BaseApiController
         if (sourceUser.UserName == username) return BadRequest("A user cannot like it own profile");
 
         if (await _likesRepository.GetUserLike(sourceUserId, likedUserId) != null)
-            return BadRequest(String.Format("User {0} is already liked by user {1}", likedUserId, sourceUserId));
+            return BadRequest(String.Format("User {0} is already liked by user {1}", username, User.GetUsername()));
 
         var userLike = new UserLike
         {
@@ -41,13 +42,16 @@ public class LikesController : BaseApiController
 
         if (await _userRepository.SaveAllAsync()) return Ok();
 
-        return BadRequest(String.Format("Failed to add like to user {0} by user {1}", likedUserId, sourceUserId));
+        return BadRequest(String.Format("Unexpected error occured while user {0} tried to like {1}", User.GetUsername(), username));
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<LikeDto>>> getUserLikes(string predicate)
+    public async Task<ActionResult<PagedList<LikeDto>>> getUserLikes([FromQuery] LikesParams likesParams)
     {
-        var users = await _likesRepository.GetUserLikes(predicate, User.GetUserId());
+        likesParams.UserId = User.GetUserId();
+
+        var users = await _likesRepository.GetUserLikes(likesParams);
+        Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
         return Ok(users);
     }
 

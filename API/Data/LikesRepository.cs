@@ -1,6 +1,7 @@
 ﻿using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,8 +21,10 @@ public class LikesRepository : ILikesRepository
         return await _context.Likes.FindAsync(sourceUserId, targetUserId);
     }
 
-    public async Task<IEnumerable<LikeDto>> GetUserLikes(string predicate, int userId)
+    public async Task<PagedList<LikeDto>> GetUserLikes(LikesParams likesParams)
     {
+        var predicate = likesParams.Predicate;
+        var userId = likesParams.UserId;
         var users = _context.Users.OrderBy(u => u.UserName).AsQueryable();
         var likes = _context.Likes.AsQueryable();
 
@@ -36,7 +39,7 @@ public class LikesRepository : ILikesRepository
             users = likes.Select(like => like.SourceUser);
         }
 
-        return await users.Select(user => new LikeDto
+        var likedUsers = users.Select(user => new LikeDto
         {
             Id = user.Id,
             UserName = user.UserName,
@@ -44,7 +47,8 @@ public class LikesRepository : ILikesRepository
             Age = user.DateOfBirth.CalculateAge(),
             PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).Url,
             City = user.City
-        }).ToListAsync();
+        });
+        return await PagedList<LikeDto>.CreateAsync(likedUsers, likesParams.PageNumber, likesParams.PageSize);
     }
 
     public async Task<User> GetUserWithLikes(int userId)
