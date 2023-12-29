@@ -7,6 +7,8 @@ export class UserParams {
   // pagination
   pageNumber = 1;
   pageSize = 10;
+  // sorting
+  orderBy = 'lastActive';
 
   constructor(user: User) {
     this.gender = user.gender === 'female' ? 'male' : 'female';
