@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FileUploadModule } from 'ng2-file-upload';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -23,6 +24,7 @@ import { ToastrModule } from 'ngx-toastr';
     FileUploadModule,
     BsDatepickerModule.forRoot(),
     PaginationModule.forRoot(),
+    ButtonsModule.forRoot(),
   ],
   exports: [
     BsDropdownModule,
@@ -32,6 +34,7 @@ import { ToastrModule } from 'ngx-toastr';
     FileUploadModule,
     BsDatepickerModule,
     PaginationModule,
+    ButtonsModule,
   ],
 })
 export class SharedModule {}
