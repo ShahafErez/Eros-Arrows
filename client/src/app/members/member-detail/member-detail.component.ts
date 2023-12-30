@@ -7,7 +7,6 @@ import { TimeagoModule } from 'ngx-timeago';
 import { Member } from 'src/app/_models/member';
 import { Message } from 'src/app/_models/message';
 import { MemberMessagesComponent } from '../member-messages/member-messages.component';
-import { MembersService } from './../../_services/members.service';
 import { MessageService } from './../../_services/message.service';
 
 @Component({
@@ -24,20 +23,37 @@ import { MessageService } from './../../_services/message.service';
   ],
 })
 export class MemberDetailComponent {
-  @ViewChild('memberTabs') memberTabs?: TabsetComponent;
-  member: Member | undefined;
+  @ViewChild('memberTabs', { static: true }) memberTabs?: TabsetComponent;
+  member: Member = {} as Member;
   images: GalleryItem[] = [];
   activeTab?: TabDirective;
   messages: Message[] = [];
 
   constructor(
-    private membersService: MembersService,
     private route: ActivatedRoute,
     private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
-    this.loadMember();
+    this.route.data.subscribe({
+      next: (data) => (this.member = data['member']),
+    });
+
+    this.route.queryParams.subscribe({
+      next: (params) => {
+        params['tab'] && this.selectTab(params['tab']);
+      },
+    });
+
+    this.getImages();
+  }
+
+  selectTab(wantedTabHeading: string) {
+    if (this.memberTabs) {
+      this.memberTabs.tabs.find((x) => x.heading === wantedTabHeading)!.active =
+        true;
+      this.memberTabs.tabs.forEach((element) => {});
+    }
   }
 
   onTabActivated(data: TabDirective) {
@@ -53,17 +69,6 @@ export class MemberDetailComponent {
         next: (messages) => (this.messages = messages),
       });
     }
-  }
-
-  loadMember() {
-    var username = this.route.snapshot.paramMap.get('username');
-    if (!username) return;
-    this.membersService.getMember(username).subscribe({
-      next: (member) => {
-        this.member = member;
-        this.getImages();
-      },
-    });
   }
 
   getImages() {
