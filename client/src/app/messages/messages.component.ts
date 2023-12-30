@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { take } from 'rxjs';
 import { Message } from '../_models/message';
 import { Pagination } from '../_models/pagination';
+import { AccountService } from '../_services/account.service';
 import { MessageService } from './../_services/message.service';
 
 @Component({
@@ -15,10 +17,17 @@ export class MessagesComponent {
   container = 'Unread';
   pageNumber = 1;
   pageSize = 8;
+  currentUsername: string | undefined;
 
-  constructor(private messageService: MessageService) {}
+  constructor(
+    private messageService: MessageService,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit(): void {
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: (user) => (this.currentUsername = user?.knownAs.toLowerCase()),
+    });
     this.loadMessages();
   }
 
@@ -33,6 +42,16 @@ export class MessagesComponent {
           this.loading = false;
         },
       });
+  }
+
+  deleteMessage(id: number) {
+    this.messageService.deleteMessage(id).subscribe({
+      next: () =>
+        this.messages?.splice(
+          this.messages.findIndex((m) => m.id === id),
+          1
+        ),
+    });
   }
 
   pageChanged(event: any) {

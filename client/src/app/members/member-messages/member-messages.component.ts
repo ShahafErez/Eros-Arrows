@@ -28,6 +28,7 @@ export class MemberMessagesComponent {
         next: (message) => {
           this.messages.push(message);
           this.messageForm?.reset();
+          this.messageContent = '';
         },
       });
   }
