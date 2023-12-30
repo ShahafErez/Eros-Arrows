@@ -32,7 +32,7 @@ public class MessagesController : BaseApiController
         }
         var sender = await _userRepository.GetUserByUsernameAsync(senderUsername);
         var recipient = await _userRepository.GetUserByUsernameAsync(createMessageDto.RecipientUsername.ToLower());
-        if (recipient == null) return NotFound(String.Format("User {0} was not found", createMessageDto.RecipientUsername));
+        if (recipient == null) return NotFound(string.Format("User {0} was not found", createMessageDto.RecipientUsername));
 
         var message = new Message
         {
@@ -69,6 +69,8 @@ public class MessagesController : BaseApiController
     {
         var username = User.GetUsername();
         var message = await _messageRepository.GetMessage(id);
+
+        if (message == null) return NotFound(string.Format("Message with ID {0} was not found", id));
 
         if (message.SenderUsername != username) return Unauthorized();
         if (message.DateRead != null) return BadRequest("You cannot delete a message after it has been read");
