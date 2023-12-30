@@ -28,7 +28,6 @@ export class AccountService {
   }
 
   register(model: any) {
-    console.log('baseUrlAccount ', this.baseUrlAccount);
     return this.http.post<User>(this.baseUrlAccount + '/register', model).pipe(
       map((user) => {
         if (user) {

@@ -39,7 +39,6 @@ export class MemberEditComponent {
   }
 
   loadMember() {
-    console.log('loading memebrs');
     if (!this.user) return;
     this.membersService.getMember(this.user.username).subscribe({
       next: (member) => {
