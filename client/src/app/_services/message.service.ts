@@ -30,4 +30,11 @@ export class MessageService {
       `${this.baseUrlMessages}/thread/${username}`
     );
   }
+
+  sendMessage(username: string, content: string) {
+    return this.http.post<Message>(this.baseUrlMessages, {
+      recipientUsername: username,
+      content,
+    });
+  }
 }

@@ -11,6 +11,7 @@ import { MessageService } from './../_services/message.service';
 export class MessagesComponent {
   messages: Message[] | undefined;
   pagination: Pagination | undefined;
+  loading = false;
   container = 'Unread';
   pageNumber = 1;
   pageSize = 8;
@@ -22,12 +23,14 @@ export class MessagesComponent {
   }
 
   loadMessages() {
+    this.loading = true;
     this.messageService
       .getMessages(this.pageNumber, this.pageSize, this.container)
       .subscribe({
         next: (response) => {
           this.messages = response.result;
           this.pagination = response.pagination;
+          this.loading = false;
         },
       });
   }
