@@ -8,7 +8,7 @@ a {
   color: black;
 }
 
-img {
+#user-photo {
   max-height: 40px;
   border: 2px solid white;
   display: inline;

@@ -1,10 +1,8 @@
-﻿using System.Security.Cryptography;
-using System.Text;
-using API.Data;
-using API.DTOs;
+﻿using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,13 +10,13 @@ namespace API.Controllers;
 
 public class AccountController : BaseApiController
 {
-    private readonly DataContext _context;
+    private readonly UserManager<User> _userManager;
     private readonly ITokenService _tokenService;
     private readonly IMapper _mapper;
 
-    public AccountController(DataContext context, ITokenService tokenService, IMapper mapper)
+    public AccountController(UserManager<User> userManager, ITokenService tokenService, IMapper mapper)
     {
-        _context = context;
+        _userManager = userManager;
         _tokenService = tokenService;
         _mapper = mapper;
     }
@@ -30,18 +28,11 @@ public class AccountController : BaseApiController
         if (await UserExists(username)) return BadRequest("Username is taken");
 
         var user = _mapper.Map<User>(registerDto);
-
-        var password = registerDto.Password;
-
-        using var hmac = new HMACSHA512();
-
-        // TODO- move to mapper
         user.UserName = username;
-        user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-        user.PasswordSalt = hmac.Key;
 
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
+        var result = await _userManager.CreateAsync(user, registerDto.Password);
+        if (!result.Succeeded) return BadRequest(result.Errors);
+
         return new UserDto
         {
             Username = user.UserName,
@@ -57,18 +48,15 @@ public class AccountController : BaseApiController
         var errorMessage = "Username or Password is incorrect.";
         var username = loginDto.Username.ToLower();
 
-        var user = await _context.Users
+        var user = await _userManager.Users
         .Include(p => p.Photos)
         .SingleOrDefaultAsync(user => user.UserName == username);
+
         if (user == null) return Unauthorized(errorMessage);
 
-        // checking if the password matches the user's hashed password in DB
-        using var hmac = new HMACSHA512(user.PasswordSalt);
-        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-        for (int i = 0; i < computedHash.Length; i++)
-        {
-            if (computedHash[i] != user.PasswordHash[i]) return Unauthorized(errorMessage);
-        }
+        var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+        if (!result) return Unauthorized();
+
         return new UserDto
         {
             Username = user.UserName,
@@ -81,6 +69,6 @@ public class AccountController : BaseApiController
 
     private async Task<bool> UserExists(string username)
     {
-        return await _context.Users.AnyAsync(user => user.UserName == username.ToLower());
+        return await _userManager.Users.AnyAsync(user => user.UserName == username.ToLower());
     }
 }

@@ -1,27 +1,48 @@
 ﻿using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class DataContext : DbContext
+public class DataContext : IdentityDbContext<User, Role, int,
+IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>,
+ IdentityRoleClaim<int>, IdentityUserToken<int>>
 {
     public DataContext(DbContextOptions options) : base(options)
     {
     }
 
-    public DbSet<User> Users { get; set; }
     public DbSet<UserLike> Likes { get; set; }
     public DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
+
+        buildUserRoleModels(builder);
         buildLikeModel(builder);
         buildMessageModel(builder);
     }
 
-    private void buildLikeModel(ModelBuilder builder)
+    private static void buildUserRoleModels(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
+        builder.Entity<User>()
+       .HasMany(ur => ur.UserRoles)
+       .WithOne(u => u.User)
+       .HasForeignKey(ur => ur.UserId)
+       .IsRequired();
+
+        builder.Entity<Role>()
+        .HasMany(ur => ur.UserRoles)
+        .WithOne(u => u.Role)
+        .HasForeignKey(ur => ur.RoleId)
+        .IsRequired();
+    }
+
+    private static void buildLikeModel(ModelBuilder builder)
+    {
+
         builder.Entity<UserLike>()
         .HasKey(k => new { k.SourceUserId, k.TargetUserId });
 
@@ -38,7 +59,7 @@ public class DataContext : DbContext
         .OnDelete(DeleteBehavior.Cascade);
     }
 
-    private void buildMessageModel(ModelBuilder builder)
+    private static void buildMessageModel(ModelBuilder builder)
     {
         builder.Entity<Message>()
         .HasOne(u => u.Recipient)

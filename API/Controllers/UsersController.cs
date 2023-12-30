@@ -90,7 +90,7 @@ public class UsersController : BaseApiController
         if (user == null) return NotFound();
         var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
         if (photo == null) return NotFound();
-        if (photo.IsMain) return BadRequest(String.Format("Photo with ID {0} is already set as the main photo", photoId));
+        if (photo.IsMain) return BadRequest(string.Format("Photo with ID {0} is already set as the main photo", photoId));
         var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
         if (currentMain != null) currentMain.IsMain = false;
         photo.IsMain = true;

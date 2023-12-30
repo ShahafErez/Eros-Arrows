@@ -25,13 +25,13 @@ public class LikesController : BaseApiController
         var likedUser = await _userRepository.GetUserByUsernameAsync(username.ToLower());
         var sourceUser = await _likesRepository.GetUserWithLikes(sourceUserId);
 
-        if (likedUser == null) return NotFound(String.Format("User {0} was not found", username));
+        if (likedUser == null) return NotFound(string.Format("User {0} was not found", username));
         var likedUserId = likedUser.Id;
 
         if (sourceUser.UserName == username) return BadRequest("A user cannot like it own profile");
 
         if (await _likesRepository.GetUserLike(sourceUserId, likedUserId) != null)
-            return BadRequest(String.Format("User {0} is already liked by user {1}", username, User.GetUsername()));
+            return BadRequest(string.Format("User {0} is already liked by user {1}", username, User.GetUsername()));
 
         var userLike = new UserLike
         {
@@ -42,7 +42,7 @@ public class LikesController : BaseApiController
 
         if (await _userRepository.SaveAllAsync()) return Ok();
 
-        return BadRequest(String.Format("Unexpected error occured while user {0} tried to like {1}", User.GetUsername(), username));
+        return BadRequest(string.Format("Unexpected error occured while user {0} tried to like {1}", User.GetUsername(), username));
     }
 
     [HttpGet]
