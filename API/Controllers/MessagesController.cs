@@ -64,4 +64,18 @@ public class MessagesController : BaseApiController
         return Ok(await _messageRepository.GetMessageThread(User.GetUsername(), username.ToLower()));
     }
 
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteMessage(int id)
+    {
+        var username = User.GetUsername();
+        var message = await _messageRepository.GetMessage(id);
+
+        if (message.SenderUsername != username) return Unauthorized();
+        if (message.DateRead != null) return BadRequest("You cannot delete a message after it has been read");
+
+        _messageRepository.DeleteMessage(message);
+        if (await _messageRepository.SaveAllAsync()) return Ok();
+
+        return BadRequest("Problem deleting message");
+    }
 }
