@@ -50,7 +50,7 @@
         <gallery *ngIf="photoTab.active" [items]="images" />
       </tab>
       <tab heading="Messages">
-        <p>Messages will go here</p>
+        <app-member-messages [username]="member.userName" />
       </tab>
     </tabset>
   </div>

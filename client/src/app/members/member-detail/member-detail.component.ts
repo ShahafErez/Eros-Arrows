@@ -5,6 +5,7 @@ import { GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TimeagoModule } from 'ngx-timeago';
 import { Member } from 'src/app/_models/member';
+import { MemberMessagesComponent } from '../member-messages/member-messages.component';
 import { MembersService } from './../../_services/members.service';
 
 @Component({
@@ -12,7 +13,13 @@ import { MembersService } from './../../_services/members.service';
   standalone: true,
   templateUrl: './member-detail.component.html',
   styleUrls: ['./member-detail.component.css'],
-  imports: [CommonModule, TabsModule, GalleryModule, TimeagoModule],
+  imports: [
+    CommonModule,
+    TabsModule,
+    GalleryModule,
+    TimeagoModule,
+    MemberMessagesComponent,
+  ],
 })
 export class MemberDetailComponent {
   member: Member | undefined;
