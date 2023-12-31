@@ -1,3 +1,4 @@
+using API;
 using API.Data;
 using API.Entities;
 using API.Extensions;
@@ -42,8 +43,9 @@ try
 {
     var context = services.GetRequiredService<DataContext>();
     var userManager = services.GetRequiredService<UserManager<User>>();
+    var roleManager = services.GetRequiredService<RoleManager<Role>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedUsers(userManager);
+    await Seed.SeedUsers(userManager, roleManager);
 }
 catch (Exception ex)
 {
