@@ -1,6 +1,4 @@
-﻿using API.Helpers;
-
-namespace API;
+﻿namespace API.Helpers;
 
 public class MessageParams : PaginationParams
 {

@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { adminGuard } from './_guards/admin.guard';
 import { authGuard } from './_guards/auth.guard';
 import { preventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
 import { memberDetailedResolver } from './_resolvers/member-detailed.resolver';
+import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { HomeComponent } from './home/home.component';
 import { ListsComponent } from './lists/lists.component';
@@ -32,6 +34,11 @@ const routes: Routes = [
       },
       { path: 'lists', component: ListsComponent },
       { path: 'messages', component: MessagesComponent },
+      {
+        path: 'admin',
+        component: AdminPanelComponent,
+        canActivate: [adminGuard],
+      },
     ],
   },
   { path: 'not-found', component: NotFoundComponent, pathMatch: 'full' },

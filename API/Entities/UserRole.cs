@@ -1,7 +1,6 @@
-﻿using API.Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace API;
+namespace API.Entities;
 
 public class UserRole : IdentityUserRole<int>
 {
