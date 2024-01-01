@@ -4,10 +4,14 @@ import { ActivatedRoute } from '@angular/router';
 import { GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
 import { TabDirective, TabsModule, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { TimeagoModule } from 'ngx-timeago';
+import { take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
 import { Message } from 'src/app/_models/message';
+import { User } from 'src/app/_models/user';
 import { MemberMessagesComponent } from '../member-messages/member-messages.component';
+import { AccountService } from './../../_services/account.service';
 import { MessageService } from './../../_services/message.service';
+import { PresenceService } from './../../_services/presence.service';
 
 @Component({
   selector: 'app-member-detail',
@@ -28,38 +32,50 @@ export class MemberDetailComponent {
   images: GalleryItem[] = [];
   activeTab?: TabDirective;
   messages: Message[] = [];
+  user?: User;
 
   constructor(
     private route: ActivatedRoute,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+    public presenceService: PresenceService,
+    private accountService: AccountService
+  ) {
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: (user) => {
+        if (user) this.user = user;
+      },
+    });
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe({
       next: (data) => (this.member = data['member']),
     });
-
     this.route.queryParams.subscribe({
       next: (params) => {
         params['tab'] && this.selectTab(params['tab']);
       },
     });
-
     this.getImages();
+  }
+
+  ngOnDestroy(): void {
+    this.messageService.stopHubConnection();
   }
 
   selectTab(wantedTabHeading: string) {
     if (this.memberTabs) {
       this.memberTabs.tabs.find((x) => x.heading === wantedTabHeading)!.active =
         true;
-      this.memberTabs.tabs.forEach((element) => {});
     }
   }
 
   onTabActivated(data: TabDirective) {
     this.activeTab = data;
-    if (this.activeTab.heading === 'Messages') {
-      this.loadMessages();
+    if (this.activeTab.heading === 'Messages' && this.user) {
+      this.messageService.createHubConnection(this.user, this.member.userName);
+    } else {
+      this.messageService.stopHubConnection();
     }
   }
 

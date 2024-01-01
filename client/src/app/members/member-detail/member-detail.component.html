@@ -7,6 +7,14 @@
         class="card-img-top img-thumbnail"
       />
       <div class="card-body">
+        <div
+          class="mb-2"
+          *ngIf="
+            (presenceService.onlineUsers$ | async)?.includes(member.userName)
+          "
+        >
+          <i class="class fa fa-user-circle text-success"></i> Online Now
+        </div>
         <div>
           <strong>Location:</strong>
           <p>{{ member.city }}, {{ member.country }}</p>
@@ -17,7 +25,7 @@
         </div>
         <div>
           <strong>Last active:</strong>
-          <p>{{ member.lastActive + "Z" | timeago }}</p>
+          <p>{{ member.lastActive | timeago }}</p>
         </div>
         <div>
           <strong>Member since:</strong>
@@ -59,10 +67,7 @@
         <gallery *ngIf="photoTab.active" [items]="images" />
       </tab>
       <tab heading="Messages" (selectTab)="onTabActivated($event)">
-        <app-member-messages
-          [username]="member.userName"
-          [messages]="messages"
-        />
+        <app-member-messages [username]="member.userName" />
       </tab>
     </tabset>
   </div>
