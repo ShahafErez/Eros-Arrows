@@ -8,6 +8,7 @@ import { Member } from 'src/app/_models/member';
 import { Message } from 'src/app/_models/message';
 import { MemberMessagesComponent } from '../member-messages/member-messages.component';
 import { MessageService } from './../../_services/message.service';
+import { PresenceService } from './../../_services/presence.service';
 
 @Component({
   selector: 'app-member-detail',
@@ -31,7 +32,8 @@ export class MemberDetailComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
+    public presenceService: PresenceService
   ) {}
 
   ngOnInit(): void {
@@ -52,7 +54,6 @@ export class MemberDetailComponent {
     if (this.memberTabs) {
       this.memberTabs.tabs.find((x) => x.heading === wantedTabHeading)!.active =
         true;
-      this.memberTabs.tabs.forEach((element) => {});
     }
   }
 

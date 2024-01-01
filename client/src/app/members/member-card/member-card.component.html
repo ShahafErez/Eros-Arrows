@@ -26,9 +26,16 @@
       </li>
     </ul>
   </div>
+
   <div class="card-body">
     <h6 class="card-title">
-      <i class="fa fa-user"></i>
+      <span
+        [class.is-online]="
+          (presenceService.onlineUsers$ | async)?.includes(member.userName)
+        "
+      >
+        <i class="fa fa-user"></i>
+      </span>
       {{ member.knownAs }}, {{ member.age }}
     </h6>
     <p class="card-text text-muted">{{ member.city }}</p>
