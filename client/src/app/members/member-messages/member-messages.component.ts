@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { TimeagoModule } from 'ngx-timeago';
-import { Message } from 'src/app/_models/message';
 import { MessageService } from './../../_services/message.service';
 
 @Component({
@@ -14,22 +13,18 @@ import { MessageService } from './../../_services/message.service';
 })
 export class MemberMessagesComponent {
   @Input('messageForm') messageForm?: NgForm;
-  @Input() messages: Message[] = [];
   @Input() username?: string;
   messageContent = '';
 
-  constructor(private messageService: MessageService) {}
+  constructor(public messageService: MessageService) {}
 
   sendMessage() {
     if (!this.username) return;
     this.messageService
       .sendMessage(this.username, this.messageContent)
-      .subscribe({
-        next: (message) => {
-          this.messages.push(message);
-          this.messageForm?.reset();
-          this.messageContent = '';
-        },
+      .then(() => {
+        this.messageForm?.reset();
+        this.messageContent = '';
       });
   }
 }
