@@ -16,16 +16,19 @@ export class MemberMessagesComponent {
   @Input('messageForm') messageForm?: NgForm;
   @Input() username?: string;
   messageContent = '';
+  loading = false;
 
   constructor(public messageService: MessageService) {}
 
   sendMessage() {
     if (!this.username) return;
+    this.loading = true;
     this.messageService
       .sendMessage(this.username, this.messageContent)
       .then(() => {
         this.messageForm?.reset();
         this.messageContent = '';
-      });
+      })
+      .finally(() => (this.loading = false));
   }
 }
