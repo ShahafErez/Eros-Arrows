@@ -29,6 +29,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { RolesModalComponent } from './modals/roles-modal/roles-modal.component';
 import { NavComponent } from './nav/nav.component';
 import { RegisterComponent } from './register/register.component';
+import { ConfirmDialogComponent } from './modals/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { RegisterComponent } from './register/register.component';
     UserManagementComponent,
     PhotoManagementComponent,
     RolesModalComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
