@@ -1,11 +1,9 @@
-﻿using API.Entities;
-
-namespace API;
+﻿namespace API.Interfaces;
 
 public interface IAdminService
 {
 
-    Task<User[]> GetUsersWithRoles();
+    Task<List<UserRoleDto>> GetUsersWithRoles();
     Task<IList<string>> EditRoles(string username, string roles);
 
 }

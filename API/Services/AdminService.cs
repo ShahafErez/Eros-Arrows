@@ -1,8 +1,9 @@
 ﻿using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace API;
+namespace API.Services;
 
 public class AdminService : IAdminService
 {
@@ -31,13 +32,13 @@ public class AdminService : IAdminService
         return await _userManager.GetRolesAsync(user);
     }
 
-    public async Task<List<User>> GetUsersWithRoles()
+    public async Task<List<UserRoleDto>> GetUsersWithRoles()
     {
         return await _userManager.Users
          .OrderBy(u => u.UserName)
-         .Select(u => new
+         .Select(u => new UserRoleDto
          {
-             u.Id,
+             Id = u.Id,
              Username = u.UserName,
              Roles = u.UserRoles.Select(r => r.Role.Name).ToList()
          }).ToListAsync();
