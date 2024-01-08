@@ -8,46 +8,25 @@ namespace API.Controllers;
 
 public class AdminController : BaseApiController
 {
-    private readonly UserManager<User> _userManager;
+    private readonly IAdminService _adminService;
 
-    public AdminController(UserManager<User> userManager)
+    public AdminController(IAdminService adminService)
     {
-        _userManager = userManager;
+        _adminService = adminService;
     }
 
     [Authorize(Policy = "RequireAdminRole")]
     [HttpGet("users-with-roles")]
     public async Task<ActionResult> GetUsersWithRoles()
     {
-        var users = await _userManager.Users
-        .OrderBy(u => u.UserName)
-        .Select(u => new
-        {
-            u.Id,
-            Username = u.UserName,
-            Roles = u.UserRoles.Select(r => r.Role.Name).ToList()
-        }).ToListAsync();
 
-        return Ok(users);
+        return Ok(await _adminService.GetUsersWithRoles());
     }
 
     [Authorize(Policy = "RequireAdminRole")]
     [HttpPut("edit-roles/{username}")]
     public async Task<ActionResult> EditRoles(string username, [FromQuery] string roles)
     {
-        if (string.IsNullOrEmpty(roles)) return BadRequest("You must select at least one role");
-
-        var selectedRoles = roles.Split(",").ToArray();
-
-        var user = await _userManager.FindByNameAsync(username);
-        if (user == null) return NotFound();
-
-        var currentRoles = await _userManager.GetRolesAsync(user);
-        var result = await _userManager.AddToRolesAsync(user, selectedRoles.Except(currentRoles));
-        if (!result.Succeeded) return BadRequest("Failed to add to roles");
-        result = await _userManager.RemoveFromRolesAsync(user, currentRoles.Except(selectedRoles));
-        if (!result.Succeeded) return BadRequest("Failed to remove from roles");
-
-        return Ok(await _userManager.GetRolesAsync(user));
+        return Ok(await _adminService.EditRoles(username, roles));
     }
 }

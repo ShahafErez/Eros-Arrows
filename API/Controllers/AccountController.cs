@@ -24,6 +24,4 @@ public class AccountController : BaseApiController
     {
         return await _accountService.Login(loginDto);
     }
-
-
 }
