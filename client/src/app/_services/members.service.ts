@@ -16,6 +16,7 @@ import { AccountService } from './account.service';
 })
 export class MembersService {
   baseUrlUsers = environment.apiUrl + '/users';
+  baseUrlPhotos = environment.apiUrl + '/photos';
   baseUrlLikes = environment.apiUrl + '/likes';
   members: Member[] = [];
   memberCache = new Map();
@@ -99,11 +100,11 @@ export class MembersService {
   }
 
   setMainPhoto(photoId: number) {
-    return this.http.put(`${this.baseUrlUsers}/set-main-photo/${photoId}`, {});
+    return this.http.put(`${this.baseUrlPhotos}/set-main/${photoId}`, {});
   }
 
   deletePhoto(photoId: number) {
-    return this.http.delete(`${this.baseUrlUsers}/delete-photo/${photoId}`);
+    return this.http.delete(`${this.baseUrlPhotos}/${photoId}`);
   }
 
   addLike(username: string) {
