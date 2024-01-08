@@ -26,6 +26,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IAdminService, AdminService>();
         services.AddScoped<ILikeService, LikeService>();
+        services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<LogUserActivity>();
         services.AddSignalR();
         services.AddSingleton<PresenceTracker>();

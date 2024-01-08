@@ -16,7 +16,7 @@ public class LikeService : ILikeService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<bool> AddLike(string username, int sourceUserId)
+    public async Task AddLike(string username, int sourceUserId)
     {
         var likedUser = await _unitOfWork.UserRepository.GetUserByUsernameAsync(username.ToLower());
         var sourceUser = await _unitOfWork.LikesRepository.GetUserWithLikes(sourceUserId);
@@ -36,9 +36,7 @@ public class LikeService : ILikeService
         };
         sourceUser.LikedUsers.Add(userLike);
 
-        if (await _unitOfWork.Complete()) return true;
-
-        throw new BadHttpRequestException(string.Format("Unexpected error occured while user {0} tried to like {1}", likedUserId, sourceUserId));
+        if (!await _unitOfWork.Complete()) throw new BadHttpRequestException(string.Format("Unexpected error occured while user {0} tried to like {1}", likedUserId, sourceUserId));
     }
 
     public async Task<PagedList<LikeDto>> getUserLikes(LikesParams likesParams)

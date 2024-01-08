@@ -1,5 +1,6 @@
 ﻿using API.DTOs;
 using API.Entities;
+using API.Errors;
 using API.Interfaces.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ public class AdminService : IAdminService
         var selectedRoles = roles.Split(",").ToArray();
 
         var user = await _userManager.FindByNameAsync(username) ??
-        throw new KeyNotFoundException(string.Format("User by the username {0} was not found", username));
+        throw new NotFoundException(string.Format("User {0} was not found", username));
 
         var currentRoles = await _userManager.GetRolesAsync(user);
 

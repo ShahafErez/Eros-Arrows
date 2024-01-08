@@ -18,11 +18,8 @@ public class LikesController : BaseApiController
     [HttpPost("{username}")]
     public async Task<ActionResult> AddLike(string username)
     {
-        if (await _likeService.AddLike(username, User.GetUserId()))
-        {
-            return Ok();
-        }
-        throw new Exception("Unexpected error occurred");
+        await _likeService.AddLike(username, User.GetUserId());
+        return Ok();
     }
 
     [HttpGet]

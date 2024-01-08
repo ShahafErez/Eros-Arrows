@@ -31,7 +31,7 @@ public class ExceptionMiddleware
         {
             await handleSpecificException(context, ex, (int)HttpStatusCode.BadRequest);
         }
-        catch (KeyNotFoundException ex)
+        catch (NotFoundException ex)
         {
             await handleSpecificException(context, ex, (int)HttpStatusCode.NotFound);
         }
