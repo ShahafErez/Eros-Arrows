@@ -1,8 +1,6 @@
-﻿using AP.Interfaces.Service;
+﻿using API.Interfaces.Service;
 using API.DTOs;
 using API.Entities;
-using API.Interfaces;
-using API.Interfaces.Service;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
