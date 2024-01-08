@@ -18,17 +18,20 @@ public class AdminService : IAdminService
     public async Task<IList<string>> EditRoles(string username, string roles)
     {
         if (string.IsNullOrEmpty(roles)) throw new BadHttpRequestException("You must select at least one role");
-
         var selectedRoles = roles.Split(",").ToArray();
 
-        var user = await _userManager.FindByNameAsync(username);
-        if (user == null) throw new KeyNotFoundException();
+        var user = await _userManager.FindByNameAsync(username) ??
+        throw new KeyNotFoundException(string.Format("User by the username {0} was not found", username));
 
         var currentRoles = await _userManager.GetRolesAsync(user);
-        var result = await _userManager.AddToRolesAsync(user, selectedRoles.Except(currentRoles));
-        if (!result.Succeeded) throw new BadHttpRequestException("Failed to add to roles");
-        result = await _userManager.RemoveFromRolesAsync(user, currentRoles.Except(selectedRoles));
-        if (!result.Succeeded) throw new BadHttpRequestException("Failed to remove from roles");
+
+        var addingResult = await _userManager.AddToRolesAsync(user, selectedRoles.Except(currentRoles));
+        if (!addingResult.Succeeded)
+            throw new BadHttpRequestException("Failed to add roles to user " + username);
+
+        var removingResult = await _userManager.RemoveFromRolesAsync(user, currentRoles.Except(selectedRoles));
+        if (!removingResult.Succeeded)
+            throw new BadHttpRequestException("Failed to remove roles from user " + username);
 
         return await _userManager.GetRolesAsync(user);
     }

@@ -25,11 +25,15 @@ public class ExceptionMiddleware
         }
         catch (UnauthorizedAccessException ex)
         {
-            await HandleUnauthorizedAccessException(context, ex);
+            await handleSpecificException(context, ex, (int)HttpStatusCode.Forbidden);
         }
         catch (BadHttpRequestException ex)
         {
-            await HandleBadRequestException(context, ex);
+            await handleSpecificException(context, ex, (int)HttpStatusCode.BadRequest);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            await handleSpecificException(context, ex, (int)HttpStatusCode.NotFound);
         }
         catch (Exception ex)
         {
@@ -37,35 +41,23 @@ public class ExceptionMiddleware
         }
     }
 
-    private async Task HandleUnauthorizedAccessException(HttpContext context, Exception ex)
+    private async Task handleSpecificException(HttpContext context, Exception ex, int StatusCode)
     {
-        _logger.LogError(ex, "An unauthorized access exception occurred: {Message}", ex.Message);
+        _logger.LogError(ex, "{ExceptionType} exception occurred: {Message}", ex.GetType().ToString(), ex.Message);
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+        context.Response.StatusCode = StatusCode;
 
-        var response = new CustomException(context.Response.StatusCode, ex.Message, "Unauthorized Access");
+        var response = new CustomException(context.Response.StatusCode, ex.Message, ex.GetType().ToString());
         var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         var json = JsonSerializer.Serialize(response, options);
 
         await context.Response.WriteAsync(json);
     }
 
-    private async Task HandleBadRequestException(HttpContext context, Exception ex)
-    {
-        _logger.LogError(ex, "A bad request exception occurred: {Message}", ex.Message);
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-
-        var response = new CustomException(context.Response.StatusCode, ex.Message, "Bad Request");
-        var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-        var json = JsonSerializer.Serialize(response, options);
-
-        await context.Response.WriteAsync(json);
-    }
 
     private async Task HandleException(HttpContext context, Exception ex)
     {
-        _logger.LogError(ex, "An exception occurred: {Message}", ex.Message);
+        _logger.LogError(ex, "An unexpected exception occurred: {Message}", ex.Message);
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
@@ -77,4 +69,5 @@ public class ExceptionMiddleware
 
         await context.Response.WriteAsync(json);
     }
+
 }
