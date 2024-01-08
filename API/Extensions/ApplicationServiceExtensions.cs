@@ -5,7 +5,8 @@ using API.Interfaces;
 using API.Services;
 using API.Helpers;
 using API.SignalR;
-using AP.interfaces;
+using API.Interfaces.Service;
+using AP.Interfaces.Service;
 
 namespace API.Extensions;
 
@@ -25,7 +26,7 @@ public static class ApplicationServiceExtensions
         services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<IAccountService, AccountService>();
-        services.AddScoped<IAdminService, AdminService>();
+        services.AddScoped<Interfaces.IAdminService, AdminService>();
         services.AddScoped<LogUserActivity>();
         services.AddSignalR();
         services.AddSingleton<PresenceTracker>();

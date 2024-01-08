@@ -1,6 +1,6 @@
 ﻿using API.DTOs;
 
-namespace AP.interfaces;
+namespace AP.Interfaces.Service;
 
 public interface IAccountService
 {

@@ -1,4 +1,6 @@
-﻿namespace API.Interfaces;
+﻿using API.Interfaces.Repository;
+
+namespace API.Interfaces;
 
 public interface IUnitOfWork
 {

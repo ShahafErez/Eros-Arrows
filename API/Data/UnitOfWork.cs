@@ -1,4 +1,5 @@
 ﻿using API.Interfaces;
+using API.Interfaces.Repository;
 using AutoMapper;
 
 namespace API.Data;

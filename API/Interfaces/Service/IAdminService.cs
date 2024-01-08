@@ -1,6 +1,6 @@
 ﻿using API.DTOs;
 
-namespace API.Interfaces;
+namespace API.Interfaces.Service;
 
 public interface IAdminService
 {
