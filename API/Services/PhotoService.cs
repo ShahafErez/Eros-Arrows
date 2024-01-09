@@ -14,14 +14,12 @@ namespace API.Services;
 public class PhotoService : IPhotoService
 {
 
-    private readonly IPhotoService _photoService;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly Cloudinary _cloudinary;
 
-    public PhotoService(IOptions<CloudinarySettings> config, IPhotoService photoService, IMapper mapper, IUnitOfWork unitOfWork)
+    public PhotoService(IOptions<CloudinarySettings> config, IMapper mapper, IUnitOfWork unitOfWork)
     {
-        _photoService = photoService;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
 
@@ -33,72 +31,65 @@ public class PhotoService : IPhotoService
         _cloudinary = new Cloudinary(acc);
     }
 
-    public async Task<PhotoDto> addPhoto(IFormFile file, string username)
+    public async Task<PhotoDto> AddPhoto(IFormFile file, string username)
     {
-        Task<User> user = getUserFromUsername(username);
+        User user = await GetUserByUsername(username);
         var addingResult = await AddPhotoAsync(file);
+
         var photo = new Photo
         {
             Url = addingResult.SecureUrl.AbsoluteUri,
             PublicId = addingResult.PublicId
         };
 
-        // if it's the first photo by the user, we'll set it as admin
-        if (user.Photos.Count == 0) photo.IsMain = true;
-        user.Photos.Add(photo);
-        if (await _unitOfWork.Complete())
-        {
-            var headerValue = new { username = user.UserName };
-            var createdObject = _mapper.Map<PhotoDto>(photo);
-            return CreatedAtAction(nameof(getUser), headerValue, createdObject);
-        }
-        return BadRequest("Problem adding photo");
+        return await AssignPhotoToUser(user, photo);
     }
 
-    private
-    public Task<MemberDto> getUser(string username)
+    public async Task<MemberDto> GetUser(string username)
     {
         return await _unitOfWork.UserRepository.GetMemberAsync(username);
     }
 
-    public async Task SetMainPhoto(int photoId)
+    public async Task SetMainPhoto(int photoId, string username)
     {
-        var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
-        if (user == null) return NotFound();
-        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
-        if (photo == null) return NotFound();
-        if (photo.IsMain) return BadRequest(string.Format("Photo with ID {0} is already set as the main photo", photoId));
+        User user = await GetUserByUsername(username);
+        Photo photo = GetPhoto(user, photoId);
+
+        if (photo.IsMain) throw new BadHttpRequestException(string.Format("Photo {0} is already set as the main photo", photoId));
+
         var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
         if (currentMain != null) currentMain.IsMain = false;
         photo.IsMain = true;
 
-        if (await _unitOfWork.Complete()) return NoContent();
-        return BadRequest("problem setting the new photo");
+        if (!await _unitOfWork.Complete()) throw new BadHttpRequestException("problem setting the new photo");
     }
 
-    public async Task DeletePhoto(int photoId)
+    public async Task DeletePhoto(int photoId, string username)
     {
-        var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
-        if (user == null) return NotFound();
-        var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
-        if (photo == null) return NotFound();
-        if (photo.IsMain) return BadRequest("Cannot delete main photo");
+        User user = await GetUserByUsername(username);
+        Photo photo = GetPhoto(user, photoId);
+
+        if (photo.IsMain) throw new BadHttpRequestException("Cannot delete main photo");
         if (photo.PublicId != null)
         {
-            // delete from cloudnairy
-            var result = await _photoService.DeletePhotoAsync(photo.PublicId);
-            if (result.Error != null) return BadRequest(result.Error.Message);
+            var result = await DeletePhotoFromCloudinary(photo.PublicId);
+            if (result.Error != null) throw new BadHttpRequestException(result.Error.Message);
         }
-
         user.Photos.Remove(photo);
-        if (await _unitOfWork.Complete()) return Ok();
-        return BadRequest("Problem deleting photo");
+
+        if (!await _unitOfWork.Complete()) throw new BadHttpRequestException("An unexpected problem occured");
     }
 
-    private async Task<User> getUserFromUsername(string username)
+    private async Task<User> GetUserByUsername(string username)
     {
         return await _unitOfWork.UserRepository.GetUserByUsernameAsync(username)
         ?? throw new NotFoundException(string.Format("User {0} was not found", username));
+    }
+
+    private static Photo GetPhoto(User user, int photoId)
+    {
+        return user.Photos.FirstOrDefault(x => x.Id == photoId)
+        ?? throw new NotFoundException(string.Format("Photo {0} was not found for user {1}", photoId, user.UserName));
     }
 
     private async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
@@ -121,24 +112,20 @@ public class PhotoService : IPhotoService
         return uploadResult;
     }
 
-    private async void AssignPhotoToUser(User user, Photo photo)
+    private async Task<PhotoDto> AssignPhotoToUser(User user, Photo photo)
     {
         // The photo will be set as main, if there are no other photos
         if (user.Photos.Count == 0) photo.IsMain = true;
 
         user.Photos.Add(photo);
-        if (await _unitOfWork.Complete())
+        if (!await _unitOfWork.Complete())
         {
-            var headerValue = new { username = user.UserName };
-            var createdObject = _mapper.Map<PhotoDto>(photo);
-            return createdObject;
-            // TODO- check return value
-            // return CreatedAtAction(nameof(getUser), headerValue, createdObject);
+            throw new BadHttpRequestException("An unexpected problem occured");
         }
-        return BadRequest("Problem adding photo");
+        return _mapper.Map<PhotoDto>(photo);
     }
 
-    private async Task<DeletionResult> DeletePhotoAsync(string publicId)
+    private async Task<DeletionResult> DeletePhotoFromCloudinary(string publicId)
     {
         var deleteParams = new DeletionParams(publicId);
         return await _cloudinary.DestroyAsync(deleteParams);
