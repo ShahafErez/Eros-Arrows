@@ -18,10 +18,12 @@ public class UserService : IUserService
 
     public async Task<PagedList<MemberDto>> GetUsers(UserParams userParams, string username)
     {
-        var Gender = await _unitOfWork.UserRepository.GetUserGender(username);
-        if (string.IsNullOrEmpty(userParams.Gender))
+        var currentUser = await _unitOfWork.UserRepository.GetUserGenderByUsername(username);
+
+        // if the desired gender is not specified- the opposite gender will be selected
+        if (string.IsNullOrEmpty(userParams.DesiredGender))
         {
-            userParams.Gender = Gender == "male" ? "female" : "male";
+            userParams.DesiredGender = currentUser == "male" ? "female" : "male";
         }
         return await _unitOfWork.UserRepository.GetMembersAsync(userParams);
     }

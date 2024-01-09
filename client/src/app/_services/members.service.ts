@@ -66,7 +66,7 @@ export class MembersService {
 
     queryParams = queryParams.append('minAge', userParams.minAge);
     queryParams = queryParams.append('maxAge', userParams.maxAge);
-    queryParams = queryParams.append('gender', userParams.gender);
+    queryParams = queryParams.append('desiredGender', userParams.desiredGender);
     queryParams = queryParams.append('orderBy', userParams.orderBy);
 
     return getPaginatedResult<Member[]>(
