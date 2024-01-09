@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -15,7 +15,6 @@ import { AccountService } from './../_services/account.service';
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
-  @Output() cancelRegister = new EventEmitter();
   registerForm: FormGroup = new FormGroup({});
   maxDate: Date = new Date();
   validationErrors: string[] | undefined;
@@ -77,8 +76,8 @@ export class RegisterComponent {
     });
   }
 
-  cancel() {
-    this.cancelRegister.emit(false);
+  reset() {
+    this.initializeForm();
   }
 
   private getDateOnly(dob: string | undefined) {

@@ -2,6 +2,7 @@
   [formGroup]="registerForm"
   (ngSubmit)="registerForm.valid && register()"
   autocomplete="off"
+  style="width: 50%; margin: auto"
 >
   <h2 class="text-primary">Sign up</h2>
 
@@ -73,7 +74,5 @@
   >
     Register
   </button>
-  <button class="btn btn-secondary" type="button" (click)="cancel()">
-    Cancel
-  </button>
+  <button class="btn btn-info" type="button" (click)="reset()">Reset</button>
 </form>

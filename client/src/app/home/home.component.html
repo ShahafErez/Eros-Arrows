@@ -1,20 +1,28 @@
 <div class="container mt-5">
-  <div *ngIf="!registerMode">
-    <h1>Find your match</h1>
+  <img src="/favicon.ico" alt="logo" height="100px" />
+  <h1 style="color: #a6001c">Let The Arrows Guide Your Heart!</h1>
+
+  <!-- not registered -->
+  <div *ngIf="!(accountService.currentUser$ | async)">
     <p class="lead">sign up to view all the potential matches!</p>
     <div class="text-center">
-      <button (click)="registerToggle()" class="btn btn-primary">
-        Register
+      <button (click)="navigateToregister()" class="btn btn-secondary">
+        Register <i class="fa fa-pencil"></i>
       </button>
-      <button class="btn btn-secondary">Learn more</button>
     </div>
   </div>
 
-  <div class="container" *ngIf="registerMode">
-    <div class="row justify-content-center">
-      <div class="col-4">
-        <app-register (cancelRegister)="cancelRegisterMode($event)" />
-      </div>
-    </div>
+  <!-- registered -->
+  <div *ngIf="accountService.currentUser$ | async">
+    <p>
+      <!-- TODO:
+      1) dynamic show number of users liked
+      2) navigate
+      3) change styling
+      -->
+      You liked {{ 0 }} users.
+      <span class="clickable">See more potential matches</span>
+    </p>
+    <p><span class="clickable">Check your latest messages</span></p>
   </div>
 </div>
