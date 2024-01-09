@@ -39,7 +39,7 @@ public class LikeService : ILikeService
         if (!await _unitOfWork.Complete()) throw new BadHttpRequestException(string.Format("Unexpected error occured while user {0} tried to like {1}", likedUserId, sourceUserId));
     }
 
-    public async Task<PagedList<LikeDto>> getUserLikes(LikesParams likesParams)
+    public async Task<PagedList<LikeDto>> GetUserLikes(LikesParams likesParams)
     {
         return await _unitOfWork.LikesRepository.GetUserLikes(likesParams);
     }

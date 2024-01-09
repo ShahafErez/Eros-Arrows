@@ -6,5 +6,5 @@ namespace API.Interfaces.Service;
 public interface ILikeService
 {
     Task AddLike(string username, int sourceUserId);
-    Task<PagedList<LikeDto>> getUserLikes(LikesParams likesParams);
+    Task<PagedList<LikeDto>> GetUserLikes(LikesParams likesParams);
 }

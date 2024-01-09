@@ -23,10 +23,10 @@ public class LikesController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedList<LikeDto>>> getUserLikes([FromQuery] LikesParams likesParams)
+    public async Task<ActionResult<PagedList<LikeDto>>> GetUserLikes([FromQuery] LikesParams likesParams)
     {
         likesParams.UserId = User.GetUserId();
-        PagedList<LikeDto> users = await _likeService.getUserLikes(likesParams);
+        PagedList<LikeDto> users = await _likeService.GetUserLikes(likesParams);
         Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages));
         return Ok(users);
     }
