@@ -1,8 +1,8 @@
 ﻿namespace API.Errors;
 
-public class ApiException
+public class CustomException
 {
-    public ApiException(int statusCode, string message, string details)
+    public CustomException(int statusCode, string message, string details)
     {
         StatusCode = statusCode;
         Message = message;

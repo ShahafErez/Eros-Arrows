@@ -69,7 +69,7 @@ export class PhotoEditorComponent {
 
   initializeUploader() {
     this.uploader = new FileUploader({
-      url: `${this.baseUrl}/users/add-photo`,
+      url: `${this.baseUrl}/photos`,
       authToken: `Bearer ${this.user?.token}`,
       isHTML5: true,
       allowedFileType: ['image'],

@@ -5,7 +5,7 @@ using API.Interfaces;
 using API.Services;
 using API.Helpers;
 using API.SignalR;
-
+using API.Interfaces.Service;
 namespace API.Extensions;
 
 public static class ApplicationServiceExtensions
@@ -23,6 +23,11 @@ public static class ApplicationServiceExtensions
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
         services.AddScoped<IPhotoService, PhotoService>();
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IAdminService, AdminService>();
+        services.AddScoped<ILikeService, LikeService>();
+        services.AddScoped<IMessageService, MessageService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<LogUserActivity>();
         services.AddSignalR();
         services.AddSingleton<PresenceTracker>();
