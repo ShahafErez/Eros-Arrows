@@ -1,63 +1,60 @@
 <div>
-  <h2>Your matches - {{ pagination?.totalItems }} found</h2>
+  <h2>Your Matches - {{ pagination?.totalItems }} found</h2>
 </div>
 
 <div *ngIf="userParams">
-  <form
-    #form="ngForm"
-    class="d-flex mb-3"
-    (ngSubmit)="loadMembers()"
-    autocomplete="off"
-  >
-    <div class="d-flex mx-2">
-      <label class="col-form-label">Age from: </label>
-      <input
-        type="number"
-        class="form-control ms-1"
-        style="width: 70%"
-        name="mimAge"
-        [(ngModel)]="userParams.minAge"
-      />
+  <form #form="ngForm" (ngSubmit)="loadMembers()" autocomplete="off">
+    <div class="filters">
+      <div class="filter">
+        <label class="col-form-label">Age From: </label>
+        <input
+          type="number"
+          class="form-control"
+          name="mimAge"
+          [(ngModel)]="userParams.minAge"
+        />
+      </div>
+
+      <div class="filter">
+        <label class="col-form-label">Age To: </label>
+        <input
+          type="number"
+          class="form-control"
+          name="maxAge"
+          [(ngModel)]="userParams.maxAge"
+        />
+      </div>
+
+      <div class="filter">
+        <label class="col-form-label">Gender: </label>
+        <select
+          name="gender"
+          class="form-select"
+          [(ngModel)]="userParams.desiredGender"
+        >
+          <option *ngFor="let gender of genderList" [value]="gender.value">
+            {{ gender.display }}
+          </option>
+        </select>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" type="submit">Apply Filters</button>
+        <button
+          class="btn btn-secondary"
+          (click)="resetFilters()"
+          type="submit"
+        >
+          Reset Filters
+        </button>
+      </div>
     </div>
 
-    <div class="d-flex mx-2">
-      <label class="col-form-label">Age to: </label>
-      <input
-        type="number"
-        class="form-control ms-1"
-        style="width: 70%"
-        name="maxAge"
-        [(ngModel)]="userParams.maxAge"
-      />
-    </div>
-
-    <div class="d-flex px-2">
-      <label class="col-form-label me-2">Show: </label>
-      <select
-        name="gender"
-        style="width: 130px"
-        class="form-select ms-1"
-        [(ngModel)]="userParams.desiredGender"
-      >
-        <option *ngFor="let gender of genderList" [value]="gender.value">
-          {{ gender.display }}
-        </option>
-      </select>
-    </div>
-    <button class="btn btn-primary ms-1" type="submit">Apply Filters</button>
-    <button
-      class="btn btn-secondary ms-1"
-      (click)="resetFilters()"
-      type="submit"
-    >
-      Reset Filters
-    </button>
-
-    <div class="col">
-      <div class="byn-group float-end">
+    <div class="sort">
+      <div class="btn-group">
         <button
           type="button"
-          class="btn btn-primary"
+          class="btn btn-info"
           name="orderBy"
           [(ngModel)]="userParams.orderBy"
           btnRadio="lastActive"
@@ -68,13 +65,13 @@
 
         <button
           type="button"
-          class="btn btn-primary"
+          class="btn btn-info"
           name="orderBy"
           [(ngModel)]="userParams.orderBy"
           btnRadio="created"
           (click)="loadMembers()"
         >
-          Newest members
+          Newest
         </button>
       </div>
     </div>
