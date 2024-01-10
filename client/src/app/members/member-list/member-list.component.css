@@ -3,3 +3,35 @@
   max-width: 19%;
   margin-top: 10px;
 }
+
+input,
+select,
+button {
+  height: max-content;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+}
+
+.filter {
+  display: flex;
+  align-self: center;
+}
+
+.filter label {
+  margin-right: 5px;
+}
+
+.filter input,
+.filter select {
+  width: 150px;
+  margin-right: 10px;
+}
+
+.sort {
+  text-align: left;
+  margin-left: 28px;
+  margin-top: 10px;
+}

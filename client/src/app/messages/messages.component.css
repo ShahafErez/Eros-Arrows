@@ -5,3 +5,7 @@ th {
 .img-circle {
   max-height: 50px;
 }
+
+button i {
+  margin-right: 5px;
+}

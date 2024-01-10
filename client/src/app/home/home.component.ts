@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AccountService } from '../_services/account.service';
 
 @Component({
   selector: 'app-home',
@@ -6,16 +8,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  registerMode = false;
-  users: any;
+  constructor(public accountService: AccountService, private router: Router) {}
 
-  constructor() {}
-
-  registerToggle() {
-    this.registerMode = !this.registerMode;
+  navigateToRegister() {
+    this.router.navigateByUrl('/register');
   }
 
-  cancelRegisterMode(event: boolean) {
-    this.registerMode = event;
+  navigateToWhoLikesYou() {
+    this.router.navigateByUrl('/lists');
+  }
+
+  navigateToMatches() {
+    this.router.navigateByUrl('/members');
+  }
+
+  navigateToMessages() {
+    this.router.navigateByUrl('/messages');
   }
 }
