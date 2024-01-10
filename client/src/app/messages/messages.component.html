@@ -1,4 +1,4 @@
-<div class="mb-4 d-flex">
+<div class="d-flex">
   <div class="btn-group" name="container">
     <button
       class="btn btn-primary"
@@ -6,7 +6,7 @@
       [(ngModel)]="container"
       (click)="loadMessages()"
     >
-      <i class="fa fa-envelope">Unread</i>
+      <i class="fa fa-envelope"></i>Unread
     </button>
 
     <button
@@ -15,7 +15,7 @@
       [(ngModel)]="container"
       (click)="loadMessages()"
     >
-      <i class="fa fa-envelope-open">Inbox</i>
+      <i class="fa fa-envelope-open"></i>Inbox
     </button>
 
     <button
@@ -24,7 +24,7 @@
       [(ngModel)]="container"
       (click)="loadMessages()"
     >
-      <i class="fa fa-paper-plane">Outbox</i>
+      <i class="fa fa-paper-plane"></i>Outbox
     </button>
   </div>
 </div>
