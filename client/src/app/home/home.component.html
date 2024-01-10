@@ -1,28 +1,43 @@
 <div class="container mt-5">
-  <img src="/favicon.ico" alt="logo" height="100px" />
-  <h1 style="color: #a6001c">Let The Arrows Guide Your Heart!</h1>
+  <img
+    src="./assets/images/arrow-sideway.png"
+    style="margin-bottom: 10px"
+    alt="logo"
+    height="120px"
+  />
+  <h2 style="color: #589a87">Let The Arrows Guide Your Heart!</h2>
 
   <!-- not registered -->
   <div *ngIf="!(accountService.currentUser$ | async)">
-    <p class="lead">sign up to view all the potential matches!</p>
-    <div class="text-center">
-      <button (click)="navigateToregister()" class="btn btn-secondary">
-        Register <i class="fa fa-pencil"></i>
-      </button>
+    <p style="font-size: 18px">sign up to view all the potential matches!</p>
+
+    <div class="content">
+      <div class="icon" (click)="navigateToRegister()">
+        <img src="./assets/icons/register.png" alt="register" />
+        <p>Register</p>
+      </div>
     </div>
   </div>
 
   <!-- registered -->
-  <div *ngIf="accountService.currentUser$ | async">
-    <p>
-      <!-- TODO:
-      1) dynamic show number of users liked
-      2) navigate
-      3) change styling
-      -->
-      You liked {{ 0 }} users.
-      <span class="clickable">See more potential matches</span>
-    </p>
-    <p><span class="clickable">Check your latest messages</span></p>
+  <div
+    class="content"
+    style="margin-top: 30px"
+    *ngIf="accountService.currentUser$ | async"
+  >
+    <div class="icon" (click)="navigateToWhoLikesYou()">
+      <img src="./assets/icons/likes-you.png" alt="likes you" />
+      <p>Who Likes You</p>
+    </div>
+
+    <div class="icon" (click)="navigateToMatches()">
+      <img src="./assets/icons/matches.png" alt="matches" />
+      <p>See Potential Matches</p>
+    </div>
+
+    <div class="icon" (click)="navigateToMessages()">
+      <img src="./assets/icons/comment-heart.png" alt="messages" />
+      <p>Your Recent Messages</p>
+    </div>
   </div>
 </div>

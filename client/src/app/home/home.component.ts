@@ -10,7 +10,19 @@ import { AccountService } from '../_services/account.service';
 export class HomeComponent {
   constructor(public accountService: AccountService, private router: Router) {}
 
-  navigateToregister() {
+  navigateToRegister() {
     this.router.navigateByUrl('/register');
+  }
+
+  navigateToWhoLikesYou() {
+    this.router.navigateByUrl('/lists');
+  }
+
+  navigateToMatches() {
+    this.router.navigateByUrl('/members');
+  }
+
+  navigateToMessages() {
+    this.router.navigateByUrl('/messages');
   }
 }

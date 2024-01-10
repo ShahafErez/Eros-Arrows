@@ -1,4 +1,26 @@
 p {
-  font-size: 20px;
   color: black;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  width: 120px;
+  margin: 10px 20px;
+}
+
+.icon:hover {
+  cursor: pointer;
+}
+
+.icon img {
+  margin-bottom: 5px;
+  height: 60px;
+}
+
+.icon p {
+  font-weight: 500;
 }
