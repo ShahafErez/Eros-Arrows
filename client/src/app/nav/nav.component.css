@@ -9,7 +9,7 @@ a {
 
 #user-photo {
   max-height: 40px;
-  border: 2px solid white;
+  border-radius: 50px;
   display: inline;
 }
 
