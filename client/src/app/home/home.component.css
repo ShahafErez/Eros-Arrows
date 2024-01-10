@@ -1,5 +1,13 @@
 p {
   color: black;
+  font-size: 20px;
+}
+
+h1 {
+  font-size: 35px;
+  font-weight: 400;
+  color: #589a87;
+  margin-top: 20px;
 }
 
 .content {
@@ -8,6 +16,7 @@ p {
 }
 
 .icon {
+  margin-top: 100px;
   width: 120px;
   margin: 10px 20px;
 }
