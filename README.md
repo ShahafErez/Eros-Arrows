@@ -49,10 +49,12 @@ Follow these steps to get Eros Arrows up and running:
 
 ### Demo 1: Searching for Matches
 <img src="/client/src/assets/readme/search-for-match.gif" height="400px"/>
+
 *This demo showcases the process of searching for matches, including filtering and sorting.*
 
 ### Demo 2: User Profile and Messaging
 <img src="/client/src/assets/readme/user-profile.gif" height="400px"/>
+
 *This demo illustrates how users can view profiles and seamlessly engage in messaging.*
 
 ### Demo 3: Likes and Messages Overview
