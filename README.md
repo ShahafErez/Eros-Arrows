@@ -1,6 +1,6 @@
 ![](https://github.com/ShahafErez/Eros-Arrows/blob/readme/client/src/assets/readme/full-logo-sideways.png)
 
-# Eros Arrows - Fullstack Dating App
+# Eros Arrows - Dating App
 
 ## Overview
 
@@ -10,20 +10,12 @@ Eros Arrows is a fullstack dating application, bringing together the power of AS
 
 Eros Arrows comes packed with a variety of features, including but not limited to:
 
-- User authentication using JWT tokens
 - Private messaging system
 - Real-time notifications and presence using SignalR
 - Photo upload functionality with a gallery
 - Data filtering, sorting, and paging
+- User authentication using JWT tokens
 - Bootstrap for a visually appealing UI
-
-
-## Project Structure
-
-The project is organized into two main directories:
-
-- **Server:** Contains the ASP.NET Core WebAPI.
-- **Client:** Houses the Angular application.
 
 ## Technologies Used
 
