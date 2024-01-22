@@ -30,7 +30,7 @@ Eros Arrows comes packed with a variety of features, including but not limited t
 
 Follow these steps to get Eros Arrows up and running:
 
-1. Clone the repository: `git clone https://github.com/your-username/ErosArrows.git`
+1. Clone the repository: `git clone https://github.com/ShahafErez/Eros-Arrows.git`
 2. Navigate to the server directory: `cd ErosArrows/Server`
 3. Run the server using the .NET CLI: `dotnet run`
 4. Open a new terminal and navigate to the client directory: `cd ErosArrows/Client`
