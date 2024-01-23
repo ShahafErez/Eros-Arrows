@@ -1,4 +1,6 @@
-![](https://github.com/ShahafErez/Eros-Arrows/blob/readme/client/src/assets/readme/full-logo-sideways.png)
+<p align="center">
+<img src="/client/src/assets/readme/full-logo-sideways.png" height="120px"/>
+</p>
 
 # Eros Arrows - Dating App
 
