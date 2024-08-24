@@ -1,5 +1,5 @@
 <p align="center">
-<img src="/client/src/assets/readme/full-logo-sideways.png" height="120px"/>
+<img src="/client/src/assets/readme/full-logo-sideways.png" height="100px"/>
 </p>
 
 # Eros Arrows - Dating App
