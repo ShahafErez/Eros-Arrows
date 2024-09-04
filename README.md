@@ -6,7 +6,7 @@
 
 ## Overview
 
-Eros Arrows is a fullstack dating application, bringing together the power of ASP.NET Core on the server side and Angular on the client side. Named after the Greek god of love, Eros Arrows is designed to provide users with a seamless and enjoyable dating experience.
+Eros Arrows is a fullstack dating application, bringing together the power of .NET Core on the server side and Angular on the client side. Named after the Greek god of love, Eros Arrows is designed to provide users with a seamless and enjoyable dating experience.
 
 ## Features
 
@@ -21,7 +21,7 @@ Eros Arrows comes packed with a variety of features, including but not limited t
 
 ## Technologies Used
 
-- ASP.NET Core
+- .NET Core
 - Angular
 - Entity Framework Core
 - SignalR
